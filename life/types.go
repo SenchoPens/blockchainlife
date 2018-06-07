@@ -1,14 +1,26 @@
 package life
 
-// Max map size - ~100 megabytes
-type FieldInt uint16
+// State of a cell.
+type State bool
+
+const (
+	Dead  State = false
+	Alive State = true
+)
+
+type FieldInt int32
 
 type Coordinate struct {
-	x, y FieldInt
+	X, Y FieldInt
 }
 
-// Unique user identifier
+// Unique Owner identifier.
 type User string
 
-// Map from cells that are alive to users that own them
+// Map from cells that are Alive to users that own them.
 type UserMap map[Coordinate]User
+
+type OwnedCell struct {
+	C     Coordinate
+	Owner User
+}
