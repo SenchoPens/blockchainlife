@@ -12,6 +12,26 @@ type Block struct {
 	t    Timestamp
 }
 
+func (b *Block) Data() BlockData {
+	return b.data
+}
+
+func (b *Block) SetData(newData BlockData) {
+	b.data = newData
+}
+
+func (b *Block) IncreaseTimestamp(value Timestamp) {
+	b.t += value
+}
+
+func (b *Block) Timestamp() Timestamp {
+	return b.t
+}
+
+func (b *Block) Empty() bool {
+	return b.data == BlockData(0)
+}
+
 // blockSize defines size, where size*size = block.
 // It is 8 because 8 * 8 = 64 bits, which is the size of the block.
 const blockSize FieldInt = 8
@@ -23,6 +43,10 @@ type BlockField struct {
 	size FieldInt
 	// fullSize is size of the field in cells.
 	fullSize FieldInt
+}
+
+func (f *BlockField) BlockSize() FieldInt {
+	return f.size
 }
 
 // coordinateBlock returns field's block in which the coordinate c locates.
@@ -81,4 +105,9 @@ func (f *BlockField) Set(c Coordinate, state State) {
 
 func (f *BlockField) String() string {
 	return f.Cells().String()
+}
+
+// Block returns a pointer to a block with given Coordinate.
+func (f *BlockField) Block(c Coordinate) *Block {
+	return &f.blocks[c.Y][c.X]
 }
