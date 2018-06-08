@@ -7,5 +7,5 @@ func (c Coordinate) projectPlainOnTor(size FieldInt) Coordinate {
 }
 
 func (c Coordinate) inSquare(size FieldInt) bool {
-	return c.X < 0 || c.X >= size || c.Y < 0 || c.Y >= size
+	return !(c.X < 0 || c.X >= size || c.Y < 0 || c.Y >= size)
 }

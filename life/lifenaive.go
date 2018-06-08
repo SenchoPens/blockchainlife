@@ -57,7 +57,7 @@ func (l *Naive) alive(c Coordinate) State {
 	case Toroidal:
 		return l.field.cell(c.projectPlainOnTor(l.field.Size()))
 	case Flat:
-		if c.inSquare(l.field.Size()) {
+		if !c.inSquare(l.field.Size()) {
 			return Dead
 		}
 		return l.field.cell(c)
