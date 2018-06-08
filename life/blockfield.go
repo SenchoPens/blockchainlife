@@ -25,8 +25,8 @@ type BlockField struct {
 	fullSize FieldInt
 }
 
-// block returns field's block in which the coordinate c locates.
-func (f *BlockField) block(c Coordinate) *Block {
+// coordinateBlock returns field's block in which the coordinate c locates.
+func (f *BlockField) coordinateBlock(c Coordinate) *Block {
 	return &f.blocks[c.Y/blockSize][c.X/blockSize]
 }
 
@@ -53,7 +53,7 @@ func (f *BlockField) calcCoordinateBlockBit(c Coordinate) uint {
 
 // cell returns state of cell at given Coordinate, not handling fieldType.
 func (f *BlockField) cell(c Coordinate) State {
-	return ((*f.block(c)).data>>f.calcCoordinateBlockBit(c))%2 == 1
+	return ((*f.coordinateBlock(c)).data>>f.calcCoordinateBlockBit(c))%2 == 1
 }
 
 func (f *BlockField) Cells() *Cells {
@@ -70,7 +70,7 @@ func (f *BlockField) Cells() *Cells {
 }
 
 func (f *BlockField) Set(c Coordinate, state State) {
-	block := f.block(c)
+	block := f.coordinateBlock(c)
 	bit := BlockData(1 << f.calcCoordinateBlockBit(c))
 	if state {
 		(*block).data |= bit
