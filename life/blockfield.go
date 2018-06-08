@@ -1,7 +1,16 @@
 package life
 
-// Block is a 8*8 square of bits, 0 - cell is dead, 1 - it is alive.
-type Block uint64
+// BlockData is a 8*8 square of bits, 0 - cell is dead, 1 - it is alive.
+type BlockData uint64
+
+// Timestamp is the number of block's passed generations
+type Timestamp uint16
+
+// Block is BlockData with a Timestamp on it
+type Block struct {
+	data BlockData
+	t    Timestamp
+}
 
 // blockSize defines size, where size*size = block.
 // It is 8 because 8 * 8 = 64 bits, which is the size of the block.
@@ -44,7 +53,7 @@ func (f *BlockField) calcCoordinateBlockBit(c Coordinate) uint {
 
 // cell returns state of cell at given Coordinate, not handling fieldType.
 func (f *BlockField) cell(c Coordinate) State {
-	return (*f.block(c)>>f.calcCoordinateBlockBit(c))%2 == 1
+	return ((*f.block(c)).data>>f.calcCoordinateBlockBit(c))%2 == 1
 }
 
 func (f *BlockField) Cells() *Cells {
@@ -62,11 +71,11 @@ func (f *BlockField) Cells() *Cells {
 
 func (f *BlockField) Set(c Coordinate, state State) {
 	block := f.block(c)
-	bit := Block(1 << f.calcCoordinateBlockBit(c))
+	bit := BlockData(1 << f.calcCoordinateBlockBit(c))
 	if state {
-		*block |= bit
+		(*block).data |= bit
 	} else {
-		*block &= ^bit
+		(*block).data &= ^bit
 	}
 }
 
